@@ -92,5 +92,5 @@ ts_forecast <- function(.ts, h = NULL) {
       mutate(index = time_class_fn(index))
   }
   forecast_df %>%
-    arrange(!!!syms(grouping_cols), index)
+    arrange(!!!syms(grouping_cols), model, index)
 }
