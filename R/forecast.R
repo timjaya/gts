@@ -36,7 +36,7 @@ ts_forecast <- function(.ts, h = NULL) {
     tsibble::yearquarter
   }
 
-  if (ts_frequency != 12 | ts_frequency != 4)
+  if (ts_frequency != 12 & ts_frequency != 4)
     abort("time-series must be monthly or quarterly")
 
   forecast_df <- .ts %>%
