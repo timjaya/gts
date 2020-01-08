@@ -20,4 +20,5 @@ Imports:
     tidyr,
     stringr,
     tsibble,
-    rlang
+    rlang,
+    forecast
