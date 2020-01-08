@@ -66,7 +66,7 @@ ts_forecast <- function(.ts, h = NULL) {
       mutate(model = str_replace(model, "_model", "")) %>%
       group_by_at(vars(-ends_with("forecast"))) %>%
       select(group_cols(), everything()) %>%
-      unnest(accuracy) %>%
+      unnest(forecast) %>%
       ungroup() %>%
       mutate(model = str_replace(model, "_model", ""))
   } else {
