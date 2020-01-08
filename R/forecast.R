@@ -25,7 +25,7 @@ ts_forecast <- function(.ts, h = NULL) {
   ts_frequency <- .ts %>%
     pull(ts) %>%
     pluck(1) %>%
-    forecast::findfrequency()
+    frequency()
 
   if (is.null(h)) h <- ts_frequency
   if (length(h) > 1) abort("h must be a single number")
@@ -33,7 +33,7 @@ ts_forecast <- function(.ts, h = NULL) {
   time_class_fn <- if (ts_frequency == 52) {
     tsibble::yearweek
   } else if (ts_frequency == 12) {
-    ts_frequency == 12 ~ tsibble::yearquarter
+    tsibble::yearmonth
   } else if (ts_frequency == 4) {
     tsibble::yearquarter
   } else {
