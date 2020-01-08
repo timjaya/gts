@@ -21,6 +21,8 @@ Create forecasts from a `gts` mable.
 your_ts \%>\%
   ts_prep() \%>\%
   ts_model(forecast::auto.arima) \%>\%
-  ts_model(forecast::ets, with_log = TRUE) \%>\%
+  ts_model(forecast::ets, with_log = TRUE)
+
+your_mbl \%>\%
   ts_forecast(h = 12)
 }
