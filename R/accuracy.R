@@ -33,6 +33,8 @@ ts_accuracy <- function(.ts) {
     str_detect("model") %>%
     sum()
 
+  grouping_cols <- accuracy_df %>% select(group_cols()) %>% colnames()
+
   if (model_count == 1) {
     accuracy_df <- accuracy_df %>%
       select(group_cols(), ends_with("model"), ends_with("accuracy")) %>%
@@ -54,5 +56,6 @@ ts_accuracy <- function(.ts) {
       unnest(accuracy) %>%
       ungroup()
   }
-  accuracy_df
+  accuracy_df %>%
+    arrange(!!!syms(grouping_cols), model)
 }
