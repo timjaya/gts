@@ -13,3 +13,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/mtfairbanks/gts
 BugReports: https://github.com/mtfairbanks/gts/issues
+RoxygenNote: 7.0.2
