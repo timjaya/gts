@@ -6,5 +6,6 @@
   library(rlang)
   library(forecast)
   library(purrr)
+  library(janitor)
   invisible()
 }
