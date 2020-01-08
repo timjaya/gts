@@ -1,0 +1,83 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# gts v`r as.character(packageVersion("gts"))`
+
+<!-- badges: start -->
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
+
+The goal of gts is to provide a `fable`-like interface to the `forecast` package.
+
+## Installation
+
+You can install the released version of gts from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("gts")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("mtfairbanks/gts")
+```
+## Example
+
+We start by creating a tsibble object:
+
+```{r message=FALSE}
+library(gts)
+library(tidyverse)
+library(forecast)
+library(tsibble)
+library(tsibbledata)
+library(janitor)
+
+# Create tsibble
+aus_ts <- tsibbledata::aus_production %>%
+  pivot_longer(-Quarter, names_to = "product") %>%
+  clean_names() %>%
+  as_tsibble(index = quarter, key = product, value = value) %>%
+  fill_gaps(value = 0)
+
+aus_ts
+```
+
+You can now use this object to use `gts`:
+
+```{r warning=FALSE}
+# Create a mable-like tibble
+aus_mbl <- aus_ts %>%
+  ts_prep() %>%
+  ts_model(forecast::ets) %>%
+  ts_model(forecast::ets, with_log = TRUE, mode = "MMM") %>%
+  ts_model(forecast::auto.arima, with_log = TRUE)
+
+# Create a fable-like tibble
+aus_fbl <- aus_mbl %>%
+  ts_forecast(h = 4)
+
+aus_fbl
+```
+
+You can also get in-sample accuracy:
+```{r}
+aus_mbl %>%
+  ts_accuracy()
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
