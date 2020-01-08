@@ -23,7 +23,7 @@ The goal of gts is to provide a `fable`-like interface to the `forecast` package
 
 ## Installation
 
-You can install the released version of gts from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of `gts` from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("gts")
@@ -35,7 +35,16 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("mtfairbanks/gts")
 ```
-## Example
+## Functions
+
+`gts` has 4 core functions:
+
+* `ts_prep()`: Convert a tsibble to a `gts` ready dataset
+* `ts_model()`: Apply a `forecast` function
+* `ts_forecast()`: Create forecasts for all trained models
+* `ts_accuracy()`: Extract in-sample accuracy for all trained models
+
+## Examples
 
 We start by creating a tsibble object:
 
@@ -64,7 +73,7 @@ You can now use this object to use `gts`:
 aus_mbl <- aus_ts %>%
   ts_prep() %>%
   ts_model(forecast::ets) %>%
-  ts_model(forecast::ets, with_log = TRUE, mode = "MMM") %>%
+  ts_model(forecast::ets, with_log = TRUE, mode = "MAM") %>%
   ts_model(forecast::auto.arima, with_log = TRUE)
 
 # Create a fable-like tibble
@@ -79,5 +88,3 @@ You can also get in-sample accuracy:
 aus_mbl %>%
   ts_accuracy()
 ```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
