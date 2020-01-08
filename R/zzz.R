@@ -5,5 +5,6 @@
   library(tsibble)
   library(rlang)
   library(forecast)
+  library(purrr)
   invisible()
 }
