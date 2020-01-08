@@ -55,7 +55,7 @@ ts_forecast <- function(.ts, h = NULL) {
     str_detect("model") %>%
     sum()
 
-  grouping_cols <- forecast_df %>% select(group_vars()) %>% colnames()
+  grouping_cols <- forecast_df %>% select(group_cols()) %>% colnames()
 
   if (model_count == 1) {
     forecast_df <- forecast_df %>%
