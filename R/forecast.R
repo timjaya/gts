@@ -55,6 +55,8 @@ ts_forecast <- function(.ts, h = NULL) {
     str_detect("model") %>%
     sum()
 
+  grouping_cols <- forecast_df %>% select(group_vars()) %>% colnames()
+
   if (model_count == 1) {
     forecast_df <- forecast_df %>%
       select(group_cols(), ends_with("model"), ends_with("forecast")) %>%
@@ -89,5 +91,6 @@ ts_forecast <- function(.ts, h = NULL) {
     forecast_df <- forecast_df %>%
       mutate(index = time_class_fn(index))
   }
-  forecast_df
+  forecast_df %>%
+    arrange(grouping_cols, index)
 }
