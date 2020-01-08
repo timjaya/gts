@@ -36,9 +36,9 @@ ts_forecast <- function(.ts, h = NULL) {
     tsibble::yearmonth
   } else if (ts_frequency == 4) {
     tsibble::yearquarter
-  } else {
-    stop("time series are of an unsupported frequency")
   }
+
+  if (ts_frequency == 1) abort("time-series must be weekly, quarterly, or monthly")
 
   .ts %>%
     # Forecast time-series
