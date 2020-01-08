@@ -53,7 +53,7 @@ ts_forecast <- function(.ts, h = NULL) {
                                                         str_sub(index, 1, 3),
                                                         sep = " ") %>%
                                                     time_class_fn(),
-                                                  time_class_fn(index))
+                                                  time_class_fn(index)))
                           )) %>%
     # Remove "_model_" from names of forecasts
     rename_all(str_replace, "_model_", "_") %>%
