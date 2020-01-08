@@ -48,7 +48,13 @@ ts_forecast <- function(.ts, h = NULL) {
     mutate_at(vars(ends_with("forecast")),
               ~.x %>% map(~as_tibble(.x, rownames = "index") %>%
                             clean_names() %>%
-                            mutate(index = time_class_fn(index)))) %>%
+                            mutate(index = ifelse(ts_frequency == 12,
+                                                  str_c(str_sub(index, 5, 8),
+                                                        str_sub(index, 1, 3),
+                                                        sep = " ") %>%
+                                                    time_class_fn(),
+                                                  time_class_fn(index))
+                          )) %>%
     # Remove "_model_" from names of forecasts
     rename_all(str_replace, "_model_", "_") %>%
     # Back-transform any log forecasts
