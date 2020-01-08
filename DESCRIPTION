@@ -1,6 +1,6 @@
 Package: gts
 Title: Fable-like API to the forecast package
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person(given = "Mark",
            family = "Fairbanks",
