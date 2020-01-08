@@ -23,13 +23,7 @@ The goal of gts is to provide a `fable`-like interface to the `forecast` package
 
 ## Installation
 
-You can install the released version of `gts` from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("gts")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -66,7 +60,7 @@ aus_ts <- tsibbledata::aus_production %>%
 aus_ts
 ```
 
-You can now use this object to use `gts`:
+You can now use this tsibble to use `gts`:
 
 ```{r warning=FALSE}
 # Create a mable-like tibble

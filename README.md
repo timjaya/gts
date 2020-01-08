@@ -14,14 +14,8 @@ package.
 
 ## Installation
 
-You can install the released version of `gts` from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("gts")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install the development version from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -74,7 +68,7 @@ aus_ts
 #> # … with 1,298 more rows
 ```
 
-You can now use this object to use `gts`:
+You can now use this tsibble to use `gts`:
 
 ``` r
 # Create a mable-like tibble
@@ -89,20 +83,20 @@ aus_fbl <- aus_mbl %>%
   ts_forecast(h = 4)
 
 aus_fbl
-#> # A tibble: 216 x 8
-#>    product model   index point_forecast  lo_80  hi_80  lo_95  hi_95
-#>    <chr>   <chr>   <qtr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-#>  1 Beer    ets   2010 Q3           405. 386.   423.   376.   433.  
-#>  2 Beer    ets   2010 Q4           480. 458.   503.   445.   515.  
-#>  3 Beer    ets   2011 Q1           417. 397.   438.   386.   448.  
-#>  4 Beer    ets   2011 Q2           383. 364.   403.   353.   413.  
-#>  5 Beer    ets   2010 Q3           407.   5.96   6.05   5.94   6.08
-#>  6 Beer    ets   2010 Q4           482.   6.13   6.23   6.10   6.25
-#>  7 Beer    ets   2011 Q1           418.   5.99   6.08   5.96   6.11
-#>  8 Beer    ets   2011 Q2           384.   5.90   6.00   5.87   6.03
-#>  9 Beer    ets   2010 Q3           408.   5.97   6.06   5.94   6.08
-#> 10 Beer    ets   2010 Q4           475.   6.12   6.21   6.09   6.23
-#> # … with 206 more rows
+#> # A tibble: 72 x 8
+#>    product model       index point_forecast  lo_80  hi_80  lo_95  hi_95
+#>    <chr>   <chr>       <qtr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+#>  1 Beer    arima_log 2010 Q3           6.01   5.97   6.06   5.94   6.08
+#>  2 Beer    arima_log 2010 Q4           6.16   6.12   6.21   6.09   6.23
+#>  3 Beer    arima_log 2011 Q1           6.02   5.97   6.07   5.95   6.10
+#>  4 Beer    arima_log 2011 Q2           5.94   5.89   5.99   5.86   6.02
+#>  5 Beer    ets       2010 Q3         405.   386.   423.   376.   433.  
+#>  6 Beer    ets       2010 Q4         480.   458.   503.   445.   515.  
+#>  7 Beer    ets       2011 Q1         417.   397.   438.   386.   448.  
+#>  8 Beer    ets       2011 Q2         383.   364.   403.   353.   413.  
+#>  9 Beer    ets_log   2010 Q3           6.01   5.96   6.05   5.94   6.08
+#> 10 Beer    ets_log   2010 Q4           6.18   6.13   6.23   6.10   6.25
+#> # … with 62 more rows
 ```
 
 You can also get in-sample accuracy:
