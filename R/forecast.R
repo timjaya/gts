@@ -92,5 +92,8 @@ ts_forecast <- function(.ts, h = NULL) {
       mutate(index = time_class_fn(index))
   }
   forecast_df %>%
+    mutate(point_forecast = data.table::fifelse(str_detect(model, "log"),
+                                                exp(point_forecast),
+                                                point_forecast)) %>%
     arrange(!!!syms(grouping_cols), model, index)
 }
