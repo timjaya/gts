@@ -52,8 +52,8 @@ library(janitor)
 
 # Create tsibble
 aus_ts <- tsibbledata::aus_production %>%
-  pivot_longer(-Quarter, names_to = "product") %>%
   clean_names() %>%
+  pivot_longer(-quarter, names_to = "product") %>%
   as_tsibble(index = quarter, key = product, value = value) %>%
   fill_gaps(value = 0)
 
