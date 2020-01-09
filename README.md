@@ -84,18 +84,18 @@ aus_fbl <- aus_mbl %>%
 
 aus_fbl
 #> # A tibble: 72 x 8
-#>    product model       index point_forecast  lo_80  hi_80  lo_95  hi_95
-#>    <chr>   <chr>       <qtr>          <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-#>  1 Beer    arima_log 2010 Q3           6.01   5.97   6.06   5.94   6.08
-#>  2 Beer    arima_log 2010 Q4           6.16   6.12   6.21   6.09   6.23
-#>  3 Beer    arima_log 2011 Q1           6.02   5.97   6.07   5.95   6.10
-#>  4 Beer    arima_log 2011 Q2           5.94   5.89   5.99   5.86   6.02
-#>  5 Beer    ets       2010 Q3         405.   386.   423.   376.   433.  
-#>  6 Beer    ets       2010 Q4         480.   458.   503.   445.   515.  
-#>  7 Beer    ets       2011 Q1         417.   397.   438.   386.   448.  
-#>  8 Beer    ets       2011 Q2         383.   364.   403.   353.   413.  
-#>  9 Beer    ets_log   2010 Q3           6.01   5.96   6.05   5.94   6.08
-#> 10 Beer    ets_log   2010 Q4           6.18   6.13   6.23   6.10   6.25
+#>    product model       index point_forecast lo_80 hi_80 lo_95 hi_95
+#>    <chr>   <chr>       <qtr>          <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1 Beer    arima_log 2010 Q3           408.  390.  427.  381.  437.
+#>  2 Beer    arima_log 2010 Q4           475.  454.  497.  443.  509.
+#>  3 Beer    arima_log 2011 Q1           413.  393.  433.  383.  444.
+#>  4 Beer    arima_log 2011 Q2           380.  361.  400.  352.  411.
+#>  5 Beer    ets       2010 Q3           405.  386.  423.  376.  433.
+#>  6 Beer    ets       2010 Q4           480.  458.  503.  445.  515.
+#>  7 Beer    ets       2011 Q1           417.  397.  438.  386.  448.
+#>  8 Beer    ets       2011 Q2           383.  364.  403.  353.  413.
+#>  9 Beer    ets_log   2010 Q3           407.  388.  426.  379.  437.
+#> 10 Beer    ets_log   2010 Q4           482.  459.  506.  447.  519.
 #> # … with 62 more rows
 ```
 
