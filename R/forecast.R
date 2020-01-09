@@ -94,7 +94,7 @@ ts_forecast <- function(.ts, h = NULL) {
   forecast_df %>%
     mutate_at(vars(point_forecast, lo_80, hi_80, lo_95, hi_95),
               ~data.table::fifelse(str_detect(model, "log"),
-                                  exp(.x),
+                                  exp(.x) - 1,
                                   .x)) %>%
     arrange(!!!syms(grouping_cols), model, index)
 }
