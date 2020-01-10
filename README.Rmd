@@ -82,3 +82,36 @@ You can also get in-sample accuracy:
 aus_mbl %>%
   ts_accuracy()
 ```
+
+
+## Running in parallel
+
+```{r}
+pacman::p_load(furrr)
+
+model_fn <- function(.ts) {
+  .ts %>%
+    ts_model(forecast::ets) %>%
+    ts_model(forecast::auto.arima)
+}
+
+plan(multiprocess)
+
+tictoc::tic()
+
+parallel_mbl <- aus_ts %>%
+  ts_prep() %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(model_fn)
+
+inv_gc()
+
+parallel_fbl <- parallel_mbl %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(ts_forecast)
+
+tictoc::toc()
+
+future:::ClusterRegistry("stop")
+```
+

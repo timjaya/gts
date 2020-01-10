@@ -94,7 +94,7 @@ aus_fbl
 #>  6 beer    ets       2010 Q4           480.  458.  503.  445.  515.
 #>  7 beer    ets       2011 Q1           417.  397.  438.  386.  448.
 #>  8 beer    ets       2011 Q2           383.  364.  403.  353.  413.
-#>  9 beer    ets_log   2010 Q3           407.  388.  426.  379.  437.
+#>  9 beer    ets_log   2010 Q3           407.  388.  426.  379.  436.
 #> 10 beer    ets_log   2010 Q4           482.  459.  506.  447.  519.
 #> # … with 62 more rows
 ```
@@ -107,22 +107,65 @@ aus_mbl %>%
 #> # A tibble: 18 x 9
 #>    product    model            ME     RMSE     MAE      MPE  MAPE  MASE     ACF1
 #>    <chr>      <chr>         <dbl>    <dbl>   <dbl>    <dbl> <dbl> <dbl>    <dbl>
-#>  1 beer       arima_l…  -0.000445   0.0343 2.70e-2 -0.00529 0.449 0.724  0.0195 
+#>  1 beer       arima_l…  -0.000444   0.0342 2.69e-2 -0.00529 0.448 0.724  0.0194 
 #>  2 beer       ets       -0.371     15.6    1.19e+1 -0.0713  2.84  0.765 -0.178  
-#>  3 beer       ets_log    0.00145    0.0354 2.83e-2  0.0253  0.472 0.760 -0.158  
-#>  4 bricks     arima_l…   0.00249    0.0508 3.78e-2  0.0423  0.632 0.434  0.0804 
+#>  3 beer       ets_log    0.00148    0.0353 2.82e-2  0.0257  0.470 0.759 -0.156  
+#>  4 bricks     arima_l…   0.00250    0.0506 3.77e-2  0.0423  0.630 0.434  0.0806 
 #>  5 bricks     ets        0.946     21.6    1.58e+1  0.167   3.91  0.446  0.151  
-#>  6 bricks     ets_log   -0.00151    0.0527 3.91e-2 -0.0268  0.654 0.449  0.114  
-#>  7 cement     arima_l…   0.00157    0.0467 3.55e-2  0.0249  0.490 0.506  0.00533
+#>  6 bricks     ets_log   -0.00149    0.0527 3.91e-2 -0.0262  0.655 0.451  0.123  
+#>  7 cement     arima_l…   0.00157    0.0466 3.55e-2  0.0249  0.490 0.506  0.00539
 #>  8 cement     ets        6.92      77.1    5.46e+1  0.328   3.64  0.535 -0.0205 
-#>  9 cement     ets_log    0.00302    0.0467 3.61e-2  0.0380  0.498 0.515  0.0110 
+#>  9 cement     ets_log    0.00339    0.0467 3.61e-2  0.0435  0.498 0.515  0.00761
 #> 10 electrici… arima_l…  -0.00237    0.0186 1.45e-2 -0.0234  0.144 0.287 -0.0419 
 #> 11 electrici… ets        3.44     753.     4.74e+2  0.139   1.48  0.420 -0.0145 
-#> 12 electrici… ets_log   -0.00236    0.0190 1.50e-2 -0.0231  0.149 0.298  0.0453 
-#> 13 gas        arima_l…  -0.000245   0.0506 3.63e-2  0.0414  1.19  0.454  0.0114 
+#> 12 electrici… ets_log   -0.00236    0.0190 1.51e-2 -0.0232  0.149 0.298  0.0367 
+#> 13 gas        arima_l…  -0.000205   0.0465 3.40e-2  0.0389  1.06  0.443  0.0112 
 #> 14 gas        ets       -0.115      4.60   3.02e+0  0.199   4.08  0.542 -0.0131 
-#> 15 gas        ets_log   -0.000999   0.0641 4.41e-2  0.00982 1.45  0.551  0.214  
-#> 16 tobacco    arima_l…  -0.00865    0.0678 5.10e-2 -0.103   0.584 0.830 -0.0206 
+#> 15 gas        ets_log   -0.000741   0.0580 4.11e-2  0.0132  1.28  0.536  0.204  
+#> 16 tobacco    arima_l…  -0.00865    0.0677 5.10e-2 -0.103   0.584 0.830 -0.0206 
 #> 17 tobacco    ets      -43.9      427.     3.30e+2 -1.11    5.31  0.848  0.127  
-#> 18 tobacco    ets_log   -0.00657    0.0696 5.26e-2 -0.0792  0.604 0.856  0.106
+#> 18 tobacco    ets_log   -0.00662    0.0696 5.26e-2 -0.0798  0.603 0.856  0.107
+```
+
+## Running in parallel
+
+``` r
+pacman::p_load(furrr)
+
+model_fn <- function(.ts) {
+  .ts %>%
+    ts_model(forecast::ets) %>%
+    ts_model(forecast::auto.arima)
+}
+
+plan(multiprocess)
+#> Warning: [ONE-TIME WARNING] Forked processing ('multicore') is disabled
+#> in future (>= 1.13.0) when running R from RStudio, because it is
+#> considered unstable. Because of this, plan("multicore") will fall
+#> back to plan("sequential"), and plan("multiprocess") will fall back to
+#> plan("multisession") - not plan("multicore") as in the past. For more details,
+#> how to control forked processing or not, and how to silence this warning in
+#> future R sessions, see ?future::supportsMulticore
+
+tictoc::tic()
+
+parallel_mbl <- aus_ts %>%
+  ts_prep() %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(model_fn)
+#> Warning in .f(.x[[i]], ...): Missing values encountered. Using longest
+#> contiguous portion of time series
+#> Warning in .f(.x[[i]], ...): Missing values encountered. Using longest
+#> contiguous portion of time series
+
+inv_gc()
+
+parallel_fbl <- parallel_mbl %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(ts_forecast)
+
+tictoc::toc()
+#> 2.633 sec elapsed
+
+future:::ClusterRegistry("stop")
 ```
