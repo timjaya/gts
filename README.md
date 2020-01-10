@@ -139,13 +139,6 @@ model_fn <- function(.ts) {
 }
 
 plan(multiprocess)
-#> Warning: [ONE-TIME WARNING] Forked processing ('multicore') is disabled
-#> in future (>= 1.13.0) when running R from RStudio, because it is
-#> considered unstable. Because of this, plan("multicore") will fall
-#> back to plan("sequential"), and plan("multiprocess") will fall back to
-#> plan("multisession") - not plan("multicore") as in the past. For more details,
-#> how to control forked processing or not, and how to silence this warning in
-#> future R sessions, see ?future::supportsMulticore
 
 tictoc::tic()
 
@@ -153,10 +146,6 @@ parallel_mbl <- aus_ts %>%
   ts_prep() %>%
   split(1:nrow(.) %% 6) %>%
   future_map_dfr(model_fn)
-#> Warning in .f(.x[[i]], ...): Missing values encountered. Using longest
-#> contiguous portion of time series
-#> Warning in .f(.x[[i]], ...): Missing values encountered. Using longest
-#> contiguous portion of time series
 
 inv_gc()
 
@@ -165,7 +154,7 @@ parallel_fbl <- parallel_mbl %>%
   future_map_dfr(ts_forecast)
 
 tictoc::toc()
-#> 2.633 sec elapsed
+#> 2.709 sec elapsed
 
 future:::ClusterRegistry("stop")
 ```

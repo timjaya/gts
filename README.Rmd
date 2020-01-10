@@ -86,7 +86,7 @@ aus_mbl %>%
 
 ## Running in parallel
 
-```{r}
+```{r warning=FALSE}
 pacman::p_load(furrr)
 
 model_fn <- function(.ts) {
