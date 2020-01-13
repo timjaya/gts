@@ -15,13 +15,13 @@ ts_prep <- function(.ts) {
   if (length(key_vars(.ts)) == 0) {
     .ts %>%
       nest() %>%
-      mutate(ts = data %>% map(as.ts)) %>%
+      mutate(ts = map(data, as.ts)) %>%
       select(-data)
   } else {
     .ts %>%
       group_by_key() %>%
       nest() %>%
-      mutate(ts = data %>% map(as.ts)) %>%
+      mutate(ts = map(data, as.ts)) %>%
       select(-data)
   }
 }
