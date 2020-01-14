@@ -42,7 +42,7 @@ ts_forecast <- function(.ts, h = NULL) {
   forecast_df <- .ts %>%
     # Forecast time-series
     mutate_at(vars(ends_with("model")),
-              list(forecast = ~map(.x, forecast::forecast, h = h))) %>%
+              list(forecast = ~map(.x, possibly(function(.x) forecast::forecast(.x, h = h), otherwise = NA))) %>%
     # Convert time-series to tibble
     mutate_at(vars(ends_with("forecast")),
               ~.x %>% map(~as_tibble(.x, rownames = "index") %>%

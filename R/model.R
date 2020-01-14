@@ -36,7 +36,7 @@ ts_model <- function(.ts, .fn, with_log = FALSE, ...) {
       sym()
 
     .ts %>%
-      mutate(!!col_name := map(ts, function(.x) .fn(log(.x + 1), ...)))
+      mutate(!!col_name := map(ts, possibly(function(.x) .fn(log(.x + 1), ...), otherwise = NA)))
   } else {
     col_name <- function_name %>%
       str_replace("auto\\.", "") %>%
@@ -44,6 +44,6 @@ ts_model <- function(.ts, .fn, with_log = FALSE, ...) {
       sym()
 
     .ts %>%
-      mutate(!!col_name := map(ts, .fn, ...))
+      mutate(!!col_name := map(ts, possibly(function(.x) .fn(.x, ...), otherwise = NA)))
   }
 }
