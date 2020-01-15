@@ -19,7 +19,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mtfairbanks/gts")
+devtools::install_github("markfairbanks/gts")
 ```
 
 ## Functions
@@ -154,7 +154,7 @@ parallel_fbl <- parallel_mbl %>%
   future_map_dfr(ts_forecast)
 
 tictoc::toc()
-#> 2.709 sec elapsed
+#> 2.497 sec elapsed
 
 future:::ClusterRegistry("stop")
 ```
