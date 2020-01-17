@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of gts is to provide a `fable`-like interface to the `forecast`
@@ -154,7 +154,7 @@ parallel_fbl <- parallel_mbl %>%
   future_map_dfr(ts_forecast)
 
 tictoc::toc()
-#> 2.497 sec elapsed
+#> 2.478 sec elapsed
 
 future:::ClusterRegistry("stop")
 ```

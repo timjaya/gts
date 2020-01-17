@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # gts v`r as.character(packageVersion("gts"))`
 
 <!-- badges: start -->
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of gts is to provide a `fable`-like interface to the `forecast` package.
