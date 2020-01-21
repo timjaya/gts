@@ -4,16 +4,16 @@
 \alias{ts_model}
 \title{Train a model}
 \usage{
-ts_model(.ts, .fn, with_log = FALSE, ...)
+ts_model(.data, .fn, with_log = FALSE, ...)
 }
 \arguments{
-\item{.ts}{A `gts`` prepped time-series}
-
 \item{.fn}{A function exported by the \code{forecast} pacakge}
 
 \item{with_log}{TRUE/FALSE whether a log transform should be applied}
 
 \item{...}{Additional parameters passed to the \code{forecast} function}
+
+\item{.ts}{A `gts`` prepped time-series}
 }
 \value{
 A gts mable

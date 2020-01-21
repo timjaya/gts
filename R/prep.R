@@ -14,6 +14,9 @@ ts_prep <- function(.data,
                     target = NULL,
                     frequency = 12) {
 
+  if (!is.data.frame(.data)) stop("dt_ must be a data.frame or data.table")
+  .data <- as_dt(.data)
+
   index <- enexpr(index)
   key <- enexpr(key)
   target <- enexpr(target)
@@ -29,15 +32,13 @@ ts_prep <- function(.data,
   } else {
     groups <- tidydt:::vec_selector(.data, !!key)
 
-    .data <- as_dt(.data)
-
     .data <- .data %>%
-      group_nest(!!!groups) %>%
+      dt_group_nest(!!!groups) %>%
       dt_rename(time_series = data)
   }
 
   .data %>%
-    dt_mutate(time_series = dt_map(
+    dt_mutate(time_series = map(
       time_series,
       function(.x) .x %$%
         ts(!!target,

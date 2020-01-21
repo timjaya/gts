@@ -5,18 +5,18 @@ Authors@R:
     person(given = "Mark",
            family = "Fairbanks",
            role = c("aut", "cre"),
-           email = "mark.t.fairbanks@gmail.com.com")
+           email = "mark.t.fairbanks@gmail.com")
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/mtfairbanks/gts
-BugReports: https://github.com/mtfairbanks/gts/issues
+URL: https://github.com/markfairbanks/gts
+BugReports: https://github.com/markfairbanks/gts/issues
 RoxygenNote: 7.0.2
 Imports: 
-    janitor,
     magrittr,
     data.table,
     rlang,
-    tidydt,
+    purrr,
     forecast
+Remotes: markfairbanks/tidydt
