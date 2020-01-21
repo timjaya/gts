@@ -5,8 +5,7 @@ Authors@R:
     person(given = "Mark",
            family = "Fairbanks",
            role = c("aut", "cre"),
-           email = "mark.t.fairbanks@gmail.com.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           email = "mark.t.fairbanks@gmail.com.com")
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -15,11 +14,9 @@ URL: https://github.com/mtfairbanks/gts
 BugReports: https://github.com/mtfairbanks/gts/issues
 RoxygenNote: 7.0.2
 Imports: 
+    janitor,
     magrittr,
-    dplyr,
-    tidyr,
-    stringr,
-    tsibble,
+    data.table,
     rlang,
-    forecast,
-    data.table
+    tidydt,
+    forecast

@@ -1,6 +1,6 @@
 #' Convert tsibble to forecast ready object
 #'
-#' @param .ts A tsibble
+#' @param .data A data.frame or data.table
 #'
 #' @return A nested data frame
 #' @export
@@ -8,20 +8,41 @@
 #' @examples
 #' your_ts %>%
 #'   ts_prep()
-ts_prep <- function(.ts) {
+ts_prep <- function(.data,
+                    key = NULL,
+                    index = index,
+                    target = NULL,
+                    frequency = 12) {
 
-  if(!is_tsibble(.ts)) abort(".ts must be a tsibble")
+  index <- enexpr(index)
+  key <- enexpr(key)
+  target <- enexpr(target)
 
-  if (length(key_vars(.ts)) == 0) {
-    .ts %>%
-      nest() %>%
-      mutate(ts = map(data, as.ts)) %>%
-      select(-data)
+  if(is.null(target)) abort("target must be given")
+
+  if (is.null(key)) {
+
+    .data <- .data %>%
+      dt_group_nest() %>%
+      dt_rename(time_series = data)
+
   } else {
-    .ts %>%
-      group_by_key() %>%
-      nest() %>%
-      mutate(ts = map(data, as.ts)) %>%
-      select(-data)
+    groups <- tidydt:::vec_selector(.data, !!key)
+
+    .data <- as_dt(.data)
+
+    .data <- .data %>%
+      group_nest(!!!groups) %>%
+      dt_rename(time_series = data)
   }
+
+  .data %>%
+    dt_mutate(time_series = dt_map(
+      time_series,
+      function(.x) .x %$%
+        ts(!!target,
+           start = c(year(min(!!index)), month(min(!!index))),
+           end = c(year(max(!!index)), month(max(!!index))),
+           frequency = 12
+        )))
 }
