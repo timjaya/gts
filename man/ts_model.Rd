@@ -4,14 +4,10 @@
 \alias{ts_model}
 \title{Train a model}
 \usage{
-ts_model(.data, .fn, with_log = FALSE, ...)
+ts_model(.data, ...)
 }
 \arguments{
-\item{.fn}{A function exported by the \code{forecast} pacakge}
-
-\item{with_log}{TRUE/FALSE whether a log transform should be applied}
-
-\item{...}{Additional parameters passed to the \code{forecast} function}
+\item{...}{forecast functions passed}
 
 \item{.ts}{A `gts`` prepped time-series}
 }
@@ -25,5 +21,4 @@ Train a model exported from the \code{forecast} package
 your_ts \%>\%
   ts_prep() \%>\%
   ts_model(forecast::auto.arima) \%>\%
-  ts_model(forecast::ets, with_log = TRUE)
 }

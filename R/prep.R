@@ -15,6 +15,7 @@ ts_prep <- function(.data,
                     frequency = 12) {
 
   if (!is.data.frame(.data)) stop("dt_ must be a data.frame or data.table")
+
   .data <- as_dt(.data)
 
   index <- enexpr(index)

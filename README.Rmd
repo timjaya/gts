@@ -44,74 +44,69 @@ We start by creating a tsibble object:
 
 ```{r message=FALSE}
 library(gts)
-library(tidyverse)
-library(forecast)
-library(tsibble)
-library(tsibbledata)
-library(janitor)
 
-# Create tsibble
-aus_ts <- tsibbledata::aus_production %>%
-  clean_names() %>%
-  pivot_longer(-quarter, names_to = "product") %>%
-  as_tsibble(index = quarter, key = product, value = value) %>%
-  fill_gaps(value = 0)
-
-aus_ts
+# # Create tsibble
+# aus_ts <- tsibbledata::aus_production %>%
+#   clean_names() %>%
+#   pivot_longer(-quarter, names_to = "product") %>%
+#   as_tsibble(index = quarter, key = product, value = value) %>%
+#   fill_gaps(value = 0)
+# 
+# aus_ts
 ```
 
 You can now use this tsibble to use `gts`:
 
 ```{r warning=FALSE}
 # Create a mable-like tibble
-aus_mbl <- aus_ts %>%
-  ts_prep() %>%
-  ts_model(forecast::ets) %>%
-  ts_model(forecast::ets, with_log = TRUE, mode = "MAM") %>%
-  ts_model(forecast::auto.arima, with_log = TRUE)
-
-# Create a fable-like tibble
-aus_fbl <- aus_mbl %>%
-  ts_forecast(h = 4)
-
-aus_fbl
+# aus_mbl <- aus_ts %>%
+#   ts_prep() %>%
+#   ts_model(forecast::ets) %>%
+#   ts_model(forecast::ets, with_log = TRUE, model = "MAM") %>%
+#   ts_model(forecast::auto.arima, with_log = TRUE)
+# 
+# # Create a fable-like tibble
+# aus_fbl <- aus_mbl %>%
+#   ts_forecast(h = 4)
+# 
+# aus_fbl
 ```
 
 You can also get in-sample accuracy:
 ```{r}
-aus_mbl %>%
-  ts_accuracy()
+# aus_mbl %>%
+#   ts_accuracy()
 ```
 
 
 ## Running in parallel
 
-```{r warning=FALSE}
-pacman::p_load(furrr)
+<!-- ```{r warning=FALSE} -->
+<!-- pacman::p_load(furrr) -->
 
-model_fn <- function(.ts) {
-  .ts %>%
-    ts_model(forecast::ets) %>%
-    ts_model(forecast::auto.arima)
-}
+<!-- model_fn <- function(.ts) { -->
+<!--   .ts %>% -->
+<!--     ts_model(forecast::ets) %>% -->
+<!--     ts_model(forecast::auto.arima) -->
+<!-- } -->
 
-plan(multiprocess)
+<!-- plan(multiprocess) -->
 
-tictoc::tic()
+<!-- tictoc::tic() -->
 
-parallel_mbl <- aus_ts %>%
-  ts_prep() %>%
-  split(1:nrow(.) %% 6) %>%
-  future_map_dfr(model_fn)
+<!-- parallel_mbl <- aus_ts %>% -->
+<!--   ts_prep() %>% -->
+<!--   split(1:nrow(.) %% 6) %>% -->
+<!--   future_map_dfr(model_fn) -->
 
-inv_gc()
+<!-- inv_gc() -->
 
-parallel_fbl <- parallel_mbl %>%
-  split(1:nrow(.) %% 6) %>%
-  future_map_dfr(ts_forecast)
+<!-- parallel_fbl <- parallel_mbl %>% -->
+<!--   split(1:nrow(.) %% 6) %>% -->
+<!--   future_map_dfr(ts_forecast) -->
 
-tictoc::toc()
+<!-- tictoc::toc() -->
 
-future:::ClusterRegistry("stop")
-```
+<!-- future:::ClusterRegistry("stop") -->
+<!-- ``` -->
 
