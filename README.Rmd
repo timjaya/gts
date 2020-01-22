@@ -63,13 +63,12 @@ We can now make a mable-like data.table. Note that you must use `.ts` when calli
 aus_mbl <- aus_df %>%
   ts_prep(key = c(animal, state), index = month, target = count) %>%
   ts_model(ets(.ts),
-           ets(log(.ts + 1)),
-           auto.arima(.ts))
+           ets(log(.ts + 1)))
 
 aus_mbl
 ```
 
-From the mable we can create a fable-like data.table
+From the mable we can create a fable-like data.table:
 
 ```{r warning=FALSE}
 aus_fbl <- aus_mbl %>%
@@ -101,11 +100,14 @@ plan(multiprocess)
 
 parallel_mbl <- aus_df %>%
   ts_prep(key = c(animal, state), index = month, target = count) %>%
-  split(1:nrow(.) %% 6) %>%
+  dt_mutate(group_id = 1:.N %% 6) %>%
+  split(by = "group_id") %>% # Note: This version of split() uses data.table in the background
   future_map_dfr(model_fn)
 
 parallel_fbl <- parallel_mbl %>%
-  split(1:nrow(.) %% 6) %>%
+  as_dt() %>%
+  dt_mutate(group_id = 1:.N %% 6) %>%
+  split(by = "group_id") %>% # Note: This version of split() uses data.table in the background
   future_map_dfr(ts_forecast)
 
 future:::ClusterRegistry("stop")
