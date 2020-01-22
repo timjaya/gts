@@ -29,12 +29,12 @@ ts_accuracy <- function(.data) {
       ~ dt_map(.x, function(.y) .y %>%
                  accuracy() %>%
                  as.data.table())) %>%
-    dt_rename_all(str_replace, "_model", "_accuracy")
+    dt_rename_all(~ str_replace(.x, "_model", "_accuracy"))
 
   accuracy_df <- accuracy_df %>%
     dt_pivot_longer(dt_ends_with("accuracy"), names_to = "model", values_to = "accuracy") %>%
-    dt_mutate(model = str_replace(model, "_forecast", "")) %>%
-    dt_unnest_legacy(forecast, keep = is.character)
+    dt_mutate(model = str_replace(model, "_accuracy", "")) %>%
+    dt_unnest_legacy(accuracy, keep = is.character)
 
   accuracy_df
 }
