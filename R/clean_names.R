@@ -1,12 +1,8 @@
-name_cleaner <- function(dat, case = c(
-  "snake", "lower_camel", "upper_camel", "screaming_snake",
-  "lower_upper", "upper_lower", "all_caps", "small_camel",
-  "big_camel", "old_janitor", "parsed", "mixed", "none"
-)) {
+name_cleaner <- function(dat) {
   if(!is.data.frame(dat)){
-    stop( "clean_names() must be called on a data.frame.  Consider janitor::make_clean_names() for other cases of manipulating vectors of names.")
+    stop( "clean_names() must be called on a data.frame.")
   }
-  stats::setNames(dat, old_make_clean_names(names(dat), case = case))
+  stats::setNames(dat, old_make_clean_names(names(dat)))
 }
 
 old_make_clean_names <- function(string) {

@@ -17,84 +17,34 @@
 #'
 #' your_mbl %>%
 #'   ts_forecast(h = 12)
-ts_forecast <- function(.ts, h = NULL) {
+ts_forecast <- function(.data, h = 12) {
 
-  if (!any(str_detect(colnames(.ts), "model")))
+  if (!any(str_detect(colnames(.data), "model")))
     abort("Model columns not detected in the dataset")
 
-  ts_frequency <- .ts %>%
-    pull(ts) %>%
-    pluck(1) %>%
-    frequency()
-
-  if (is.null(h)) h <- ts_frequency
   if (length(h) > 1) abort("h must be a single number")
 
-  time_class_fn <- if (ts_frequency == 12) {
-    tsibble::yearmonth
-  } else if (ts_frequency == 4) {
-    tsibble::yearquarter
-  }
+  .data <- as_dt(.data)
 
-  if (ts_frequency != 12 & ts_frequency != 4)
-    abort("time-series must be monthly or quarterly")
+  # Forecast time-series
+  forecast_df <- .data %>%
+    dt_mutate_across(
+      c(dt_ends_with("model")),
+      ~ dt_map(.x, function(.y) forecast(.y, h = 12) %>%
+                 as.data.table(keep.rownames = TRUE) %>%
+                 dt_mutate(rn = str_c(rn, " 1")) %>%
+                 dt_mutate(rn = myd(rn)) %>%
+                 dt_rename(index = rn))
+    ) %>%
+    dt_rename_all(str_replace, "_model", "_forecast")
 
-  forecast_df <- .ts %>%
-    # Forecast time-series
-    mutate_at(vars(ends_with("model")),
-              list(forecast = ~map(.x, possibly(function(.x) forecast::forecast(.x, h = h), otherwise = NA)))) %>%
-    # Convert time-series to tibble
-    mutate_at(vars(ends_with("forecast")),
-              ~.x %>% map(~as_tibble(.x, rownames = "index") %>%
-                            clean_names()
-              )) %>%
-    # Remove "_model_" from names of forecasts
-    rename_all(str_replace, "_model_", "_")
+  # Extract forecasts
+  forecast_df <- forecast_df %>%
+    dt_select(-time_series) %>%
+    dt_pivot_longer(dt_ends_with("forecast"), names_to = "model", values_to = "forecast") %>%
+    dt_mutate(model = str_replace(model, "_forecast", "")) %>%
+    dt_unnest_legacy(forecast, keep = is.character)
 
-  model_count <- colnames(.ts) %>%
-    str_detect("model") %>%
-    sum()
-
-  grouping_cols <- forecast_df %>% select(group_cols()) %>% colnames()
-
-  if (model_count == 1) {
-    forecast_df <- forecast_df %>%
-      select(group_cols(), ends_with("model"), ends_with("forecast")) %>%
-      mutate_at(vars(ends_with("model")), ~1) %>%
-      pivot_longer(ends_with("model"), names_to = "model") %>%
-      select(-value) %>%
-      mutate(model = str_replace(model, "_model", "")) %>%
-      group_by_at(vars(-ends_with("forecast"))) %>%
-      select(group_cols(), everything()) %>%
-      unnest(forecast) %>%
-      ungroup() %>%
-      mutate(model = str_replace(model, "_model", ""))
-  } else {
-    forecast_df <- forecast_df %>%
-      select(group_cols(), ends_with("forecast")) %>%
-      pivot_longer(ends_with("forecast"), names_to = "model", values_to = "forecast") %>%
-      mutate(model = str_replace(model, "_forecast", "")) %>%
-      group_by_at(vars(-ends_with("forecast"))) %>%
-      select(group_cols(), everything()) %>%
-      unnest(forecast) %>%
-      ungroup() %>%
-      mutate(model = str_replace(model, "_model", ""))
-  }
-
-  if (ts_frequency == 12) {
-    forecast_df <- forecast_df %>%
-      mutate(index = str_c(str_sub(index, 5, 8),
-                           str_sub(index, 1, 3),
-                           sep = " ") %>%
-               time_class_fn())
-  } else {
-    forecast_df <- forecast_df %>%
-      mutate(index = time_class_fn(index))
-  }
   forecast_df %>%
-    mutate_at(vars(point_forecast, lo_80, hi_80, lo_95, hi_95),
-              ~data.table::fifelse(str_detect(model, "log"),
-                                  exp(.x) - 1,
-                                  .x)) %>%
-    arrange(!!!syms(grouping_cols), model, index)
+    name_cleaner()
 }
