@@ -27,7 +27,15 @@ ts_model <- function(.data, ...) {
 
   for (.fn in .fns) {
 
-    log_flag <- if (str_detect(deparse(.fn), "log\\(.ts")) "_log" else ""
+    log_flag <- if (str_detect(deparse(.fn), "log\\(.ts+")) {
+      "_log1"
+    } else if (str_detect(deparse(.fn), "log\\(.ts +")) {
+      "_log1"
+    } else if (str_detect(deparse(.fn), "log\\(.ts")) {
+      "_log"
+    } else {
+      ""
+    }
 
     col_name <- .fn %>%
       deparse() %>%
