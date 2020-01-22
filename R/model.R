@@ -27,6 +27,17 @@ ts_model <- function(.data, ...) {
 
   for (.fn in .fns) {
 
+    .fn_string <- deparse(.fn)
+
+    paren_location <- .fn_string %>%
+      str_locate("\\(") %>%
+      .[1]
+
+    col_name <- .fn_string %>%
+      str_sub(1, paren_location - 1) %>%
+      str_replace("forecast::", "") %>%
+      str_replace("auto\\.", "")
+
     log_flag <- if (str_detect(deparse(.fn), "log\\(.ts\\+")) {
       "_log1"
     } else if (str_detect(deparse(.fn), "log\\(.ts \\+")) {
@@ -37,13 +48,8 @@ ts_model <- function(.data, ...) {
       ""
     }
 
-    col_name <- .fn %>%
-      deparse() %>%
-      dt_str_replace("forecast::", "") %>%
-      dt_str_replace("auto\\.", "") %>%
-      dt_str_replace("\\s*\\([^\\)]+\\)", "") %>%
-      dt_str_replace("\\)", "") %>%
-      dt_str_c(log_flag, "_model") %>%
+    col_name <- col_name %>%
+      str_c(log_flag, "_model") %>%
       sym()
 
     .data %>%

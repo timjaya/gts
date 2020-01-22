@@ -17,6 +17,8 @@ Imports:
     magrittr,
     data.table,
     rlang,
+    purrr,
+    stringr,
     lubridate,
     forecast
 Remotes: markfairbanks/tidydt

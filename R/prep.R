@@ -11,8 +11,7 @@
 ts_prep <- function(.data,
                     key = NULL,
                     index = index,
-                    target = NULL,
-                    frequency = 12) {
+                    target = NULL) {
 
   if (!is.data.frame(.data)) stop("dt_ must be a data.frame or data.table")
 
