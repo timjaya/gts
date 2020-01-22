@@ -39,7 +39,7 @@ ts_prep <- function(.data,
   }
 
   .data %>%
-    dt_mutate(time_series = map(
+    dt_mutate(time_series = dt_map(
       time_series,
       function(.x) .x %$%
         ts(!!target,
