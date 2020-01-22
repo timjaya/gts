@@ -11,9 +11,10 @@
 #' @md
 #'
 #' @examples
-#' your_ts %>%
-#'   ts_prep() %>%
-#'   ts_model(forecast::auto.arima) %>%
+#' your_df %>%
+#'   ts_prep(key = c(level_1, level_2), index = index, target = revenue)
+#'   ts_model(ets(.ts),
+#'            ets(log(.ts + 1)))
 ts_model <- function(.data, ...) {
   if (!is.data.frame(.data)) stop("dt_ must be a data.frame or data.table")
   .data <- as_dt(.data)
@@ -55,5 +56,6 @@ ts_model <- function(.data, ...) {
     .data %>%
       dt_mutate(!!col_name := dt_map(time_series, possibly(function(.ts) !!.fn, otherwise = NA)))
   }
-  .data
+  .data %>%
+    dt_select(-time_series)
 }

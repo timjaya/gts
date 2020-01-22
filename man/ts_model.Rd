@@ -18,7 +18,8 @@ A gts mable
 Train a model exported from the \code{forecast} package
 }
 \examples{
-your_ts \%>\%
-  ts_prep() \%>\%
-  ts_model(forecast::auto.arima) \%>\%
+your_df \%>\%
+  ts_prep(key = c(level_1, level_2), index = index, target = revenue)
+  ts_model(ets(.ts),
+           ets(log(.ts + 1)))
 }

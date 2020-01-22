@@ -4,16 +4,16 @@
 #' Create forecasts from a `gts` mable.
 #'
 #' @param .ts A `gts` mable
-#' @param h The number of periods to forecast. If NULL, forecasts the frequency of the input time-series.
+#' @param h The number of periods to forecast. Defaults to 12
 #'
 #' @return A tibble
 #' @export
 #'
 #' @examples
-#' your_ts %>%
-#'   ts_prep() %>%
-#'   ts_model(forecast::auto.arima) %>%
-#'   ts_model(forecast::ets, with_log = TRUE)
+#' your_mbl <- your_df %>%
+#'   ts_prep(key = c(level_1, level_2), index = index, target = revenue)
+#'   ts_model(ets(.ts),
+#'            ets(log(.ts + 1)))
 #'
 #' your_mbl %>%
 #'   ts_forecast(h = 12)
@@ -40,7 +40,6 @@ ts_forecast <- function(.data, h = 12) {
 
   # Extract forecasts
   forecast_df <- forecast_df %>%
-    dt_select(-time_series) %>%
     dt_pivot_longer(dt_ends_with("forecast"), names_to = "model", values_to = "forecast") %>%
     dt_mutate(model = str_replace(model, "_forecast", "")) %>%
     dt_unnest_legacy(forecast, keep = is.character)

@@ -4,12 +4,12 @@
 \alias{ts_forecast}
 \title{Create forecasts}
 \usage{
-ts_forecast(.ts, h = NULL)
+ts_forecast(.data, h = 12)
 }
 \arguments{
-\item{.ts}{A `gts` mable}
+\item{h}{The number of periods to forecast. Defaults to 12}
 
-\item{h}{The number of periods to forecast. If NULL, forecasts the frequency of the input time-series.}
+\item{.ts}{A `gts` mable}
 }
 \value{
 A tibble
@@ -18,10 +18,10 @@ A tibble
 Create forecasts from a `gts` mable.
 }
 \examples{
-your_ts \%>\%
-  ts_prep() \%>\%
-  ts_model(forecast::auto.arima) \%>\%
-  ts_model(forecast::ets, with_log = TRUE)
+your_mbl <- your_df \%>\%
+  ts_prep(key = c(level_1, level_2), index = index, target = revenue)
+  ts_model(ets(.ts),
+           ets(log(.ts + 1)))
 
 your_mbl \%>\%
   ts_forecast(h = 12)

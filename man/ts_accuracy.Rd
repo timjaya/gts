@@ -4,22 +4,22 @@
 \alias{ts_accuracy}
 \title{Get in-sample accuracy of all models}
 \usage{
-ts_accuracy(.ts)
+ts_accuracy(.data)
 }
 \arguments{
 \item{.ts}{A `gts` mable}
 }
 \value{
-A tibble
+A data.table
 }
 \description{
 Get in-sample accuracy of all models from a `gts` mable
 }
 \examples{
-your_mbl <- your_ts \%>\%
-  ts_prep() \%>\%
-  ts_model(forecast::auto.arima) \%>\%
-  ts_model(forecast::ets, with_log = TRUE)
+your_mbl <- your_df \%>\%
+  ts_prep(key = c(level_1, level_2), index = index, target = revenue)
+  ts_model(ets(.ts),
+           ets(log(.ts + 1)))
 
 your_mbl \%>\%
   ts_accuracy()

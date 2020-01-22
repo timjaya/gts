@@ -2,12 +2,14 @@
 #'
 #' @param .data A data.frame or data.table
 #'
+#' @usage
+#'
 #' @return A nested data frame
 #' @export
 #'
 #' @examples
-#' your_ts %>%
-#'   ts_prep()
+#' your_df %>%
+#'   ts_prep(key = c(level_1, level_2), index = index, target = revenue)
 ts_prep <- function(.data,
                     key = NULL,
                     index = index,

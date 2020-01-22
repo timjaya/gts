@@ -4,7 +4,7 @@
 \alias{ts_prep}
 \title{Convert tsibble to forecast ready object}
 \usage{
-ts_prep(.data, key = NULL, index = index, target = NULL, frequency = 12)
+
 }
 \arguments{
 \item{.data}{A data.frame or data.table}
@@ -16,6 +16,6 @@ A nested data frame
 Convert tsibble to forecast ready object
 }
 \examples{
-your_ts \%>\%
-  ts_prep()
+your_df \%>\%
+  ts_prep(key = c(level_1, level_2), index = index, target = revenue)
 }
