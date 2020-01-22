@@ -46,7 +46,7 @@ ts_model <- function(.data, ...) {
       dt_str_c(log_flag, "_model") %>%
       sym()
 
-    .data <- .data %>%
+    .data %>%
       dt_mutate(!!col_name := dt_map(time_series, possibly(function(.ts) !!.fn, otherwise = NA)))
   }
   .data
