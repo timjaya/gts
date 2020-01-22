@@ -18,6 +18,8 @@
 #'   ts_accuracy()
 ts_accuracy <- function(.data) {
 
+  .data <- as_dt(.data)
+
   if (!any(str_detect(colnames(.data), "model")))
     abort("Model columns not detected in the dataset")
 
