@@ -30,7 +30,7 @@ ts_forecast <- function(.data, h = 12) {
   forecast_df <- .data %>%
     dt_mutate_across(
       c(dt_ends_with("model")),
-      ~ dt_map(.x, function(.y) forecast(.y, h = 12) %>%
+      ~ map(.x, function(.y) forecast(.y, h = 12) %>%
                  as.data.table(keep.rownames = TRUE) %>%
                  dt_mutate(rn = str_c(rn, " 1")) %>%
                  dt_mutate(rn = myd(rn)) %>%

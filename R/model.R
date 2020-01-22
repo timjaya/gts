@@ -54,7 +54,7 @@ ts_model <- function(.data, ...) {
       sym()
 
     .data %>%
-      dt_mutate(!!col_name := dt_map(time_series, possibly(function(.ts) !!.fn, otherwise = NA)))
+      dt_mutate(!!col_name := map(time_series, possibly(function(.ts) !!.fn, otherwise = NA)))
   }
   .data %>%
     dt_select(-time_series)
