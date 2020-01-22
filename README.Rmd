@@ -33,80 +33,81 @@ devtools::install_github("markfairbanks/gts")
 
 `gts` has 4 core functions:
 
-* `ts_prep()`: Convert a tsibble to a `gts` ready dataset
+* `ts_prep()`: Convert a data frame to a `gts` ready dataset
 * `ts_model()`: Apply a `forecast` function
 * `ts_forecast()`: Create forecasts for all trained models
 * `ts_accuracy()`: Extract in-sample accuracy for all trained models
 
 ## Examples
 
-We start by creating a tsibble object:
+Starting with some example data:
 
 ```{r message=FALSE}
 library(gts)
+library(janitor)
+library(tsibbledata)
 
-# # Create tsibble
-# aus_ts <- tsibbledata::aus_production %>%
-#   clean_names() %>%
-#   pivot_longer(-quarter, names_to = "product") %>%
-#   as_tsibble(index = quarter, key = product, value = value) %>%
-#   fill_gaps(value = 0)
-# 
-# aus_ts
+aus_df <- tsibbledata::aus_livestock %>%
+  janitor::clean_names() %>%
+  dt_arrange(animal, state) %>%
+  dt_mutate(group_id = .GRP, by = list(animal, state)) %>%
+  dt_filter(group_id <= 5) %>%
+  dt_mutate(month = as_date(month))
+
+head(aus_df)
 ```
 
-You can now use this tsibble to use `gts`:
+We can now make a mable-like data.table. Note that you must use `.ts` when calling `ts_model()`.
+
+```{r}
+aus_mbl <- aus_df %>%
+  ts_prep(key = c(animal, state), index = month, target = count) %>%
+  ts_model(ets(.ts),
+           ets(log(.ts + 1)),
+           auto.arima(.ts))
+
+aus_mbl
+```
+
+From the mable we can create a fable-like data.table
 
 ```{r warning=FALSE}
-# Create a mable-like tibble
-# aus_mbl <- aus_ts %>%
-#   ts_prep() %>%
-#   ts_model(forecast::ets) %>%
-#   ts_model(forecast::ets, with_log = TRUE, model = "MAM") %>%
-#   ts_model(forecast::auto.arima, with_log = TRUE)
-# 
-# # Create a fable-like tibble
-# aus_fbl <- aus_mbl %>%
-#   ts_forecast(h = 4)
-# 
-# aus_fbl
+aus_fbl <- aus_mbl %>%
+  ts_forecast(h = 12)
+
+aus_fbl
 ```
 
-You can also get in-sample accuracy:
+You can also get in-sample accuracy from the mable:
+
 ```{r}
-# aus_mbl %>%
-#   ts_accuracy()
+aus_mbl %>%
+  ts_accuracy()
 ```
 
 
 ## Running in parallel
 
-<!-- ```{r warning=FALSE} -->
-<!-- pacman::p_load(furrr) -->
+```{r warning=FALSE}
+pacman::p_load(furrr)
 
-<!-- model_fn <- function(.ts) { -->
-<!--   .ts %>% -->
-<!--     ts_model(forecast::ets) %>% -->
-<!--     ts_model(forecast::auto.arima) -->
-<!-- } -->
+model_fn <- function(.data) {
+  .data %>%
+    ts_model(ets(.ts),
+             ets(log(.ts + 1)))
+}
 
-<!-- plan(multiprocess) -->
+plan(multiprocess)
 
-<!-- tictoc::tic() -->
+parallel_mbl <- aus_df %>%
+  ts_prep(key = c(animal, state), index = month, target = count) %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(model_fn)
 
-<!-- parallel_mbl <- aus_ts %>% -->
-<!--   ts_prep() %>% -->
-<!--   split(1:nrow(.) %% 6) %>% -->
-<!--   future_map_dfr(model_fn) -->
+parallel_fbl <- parallel_mbl %>%
+  split(1:nrow(.) %% 6) %>%
+  future_map_dfr(ts_forecast)
 
-<!-- inv_gc() -->
-
-<!-- parallel_fbl <- parallel_mbl %>% -->
-<!--   split(1:nrow(.) %% 6) %>% -->
-<!--   future_map_dfr(ts_forecast) -->
-
-<!-- tictoc::toc() -->
-
-<!-- future:::ClusterRegistry("stop") -->
-<!-- ``` -->
+future:::ClusterRegistry("stop")
+```
 
