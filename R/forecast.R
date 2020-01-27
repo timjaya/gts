@@ -30,11 +30,12 @@ ts_forecast <- function(.data, h = 12) {
   forecast_df <- .data %>%
     dt_mutate_across(
       c(dt_ends_with("model")),
-      ~ map(.x, function(.y) forecast(.y, h = 12) %>%
+      ~ map(.x, possibly(function(.y) forecast(.y, h = 12) %>%
                  as.data.table(keep.rownames = TRUE) %>%
                  dt_mutate(rn = str_c(rn, " 1")) %>%
                  dt_mutate(rn = myd(rn)) %>%
-                 dt_rename(index = rn))
+                 dt_rename(index = rn),
+                 otherwise = NA))
     ) %>%
     dt_rename_all(str_replace, "_model", "_forecast")
 
