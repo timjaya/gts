@@ -21,4 +21,4 @@ Imports:
     stringr,
     lubridate,
     forecast
-Remotes: markfairbanks/tidydt
+Remotes: markfairbanks/tidytable

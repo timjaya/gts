@@ -32,7 +32,7 @@ ts_prep <- function(.data,
       dt_rename(time_series = data)
 
   } else {
-    groups <- tidydt:::vec_selector(.data, !!key)
+    groups <- tidytable:::vec_selector(.data, !!key)
 
     .data <- .data %>%
       dt_group_nest(!!!groups) %>%
