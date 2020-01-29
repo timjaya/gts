@@ -4,7 +4,7 @@
 \alias{ts_accuracy}
 \title{Get in-sample accuracy of all models}
 \usage{
-ts_accuracy(.data)
+ts_accuracy(.data, ...)
 }
 \arguments{
 \item{.ts}{A `gts` mable}
