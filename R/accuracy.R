@@ -27,7 +27,7 @@ ts_accuracy <- function(.data, ...) {
     dt_mutate_across(
       c(dt_ends_with("model")),
       ~ map(.x, possibly(function(.y) .y %>%
-                 accuracy(...) %>%
+                 accuracy() %>%
                  as.data.table(),
                  otherwise = NA))) %>%
     dt_rename_all(~ str_replace(.x, "_model", "_accuracy"))
