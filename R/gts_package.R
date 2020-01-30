@@ -6,6 +6,7 @@
 #' @importFrom purrr possibly
 #' @importFrom rlang abort
 #' @importFrom rlang enexpr
+#' @importFrom rlang enexprs
 #' @importFrom rlang sym
 #' @importFrom stats ts
 #' @importFrom stringr str_c
