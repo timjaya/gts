@@ -1,7 +1,7 @@
 .onLoad <- function(libname, pkgname) {
-  library(forecast)
-  library(lubridate)
-  library(stringr)
-  library(purrr)
+  requireNamespace(forecast)
+  requireNamespace(lubridate)
+  requireNamespace(stringr)
+  requireNamespace(purrr)
   invisible()
 }
