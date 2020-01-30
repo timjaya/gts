@@ -1,7 +1,7 @@
 # Suppress R CMD check note
 #' @importFrom lubridate month
 #' @importFrom lubridate year
-#' @importFrom magrittr "%$%"
+#' @importFrom magrittr %$%
 #' @importFrom purrr map
 #' @importFrom purrr possibly
 #' @importFrom rlang abort
