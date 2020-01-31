@@ -1,4 +1,5 @@
 # Suppress R CMD check note
+#' @importFrom forecast accuracy
 #' @importFrom lubridate month
 #' @importFrom lubridate year
 #' @importFrom magrittr "%$%"
