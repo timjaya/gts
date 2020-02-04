@@ -19,4 +19,5 @@ Imports:
     rlang,
     purrr,
     lubridate,
-    tsibble
+    tsibble,
+    dplyr
