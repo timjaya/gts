@@ -4,13 +4,10 @@
 \alias{ts_prep}
 \title{Convert tsibble to forecast ready object}
 \usage{
-
+ts_prep(.data, key = NULL, index = index, target = NULL)
 }
 \arguments{
 \item{.data}{A data.frame or data.table}
-}
-\value{
-A nested data frame
 }
 \description{
 Convert tsibble to forecast ready object

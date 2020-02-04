@@ -2,9 +2,6 @@
 #'
 #' @param .data A data.frame or data.table
 #'
-#' @usage
-#'
-#' @return A nested data frame
 #' @export
 #'
 #' @examples
@@ -15,9 +12,8 @@ ts_prep <- function(.data,
                     index = index,
                     target = NULL) {
 
-  if (!is.data.frame(.data)) stop("dt_ must be a data.frame or data.table")
-
-  .data <- as_dt(.data)
+  if (!is.data.frame(.data)) stop(".data must be a data.frame or data.table")
+  if (!is.data.table(.data)) .data <- as.data.table(.data)
 
   index <- enexpr(index)
   key <- enexpr(key)
@@ -28,24 +24,27 @@ ts_prep <- function(.data,
   if (is.null(key)) {
 
     .data <- .data %>%
-      dt_group_nest() %>%
-      dt_rename(time_series = data)
+      ts_group_nest() %>%
+      rename(time_series = data)
 
   } else {
-    groups <- tidytable:::vec_selector(.data, !!key)
+    groups <- vec_selector(.data, !!key)
 
     .data <- .data %>%
-      dt_group_nest(!!!groups) %>%
-      dt_rename(time_series = data)
+      ts_group_nest(!!!groups) %>%
+      rename(time_series = data)
   }
 
   .data %>%
-    dt_mutate(time_series = dt_map(
-      time_series,
-      function(.x) .x %$%
-        ts(!!target,
-           start = c(year(min(!!index)), month(min(!!index))),
-           end = c(year(max(!!index)), month(max(!!index))),
-           frequency = 12
-        )))
+    mutate(
+      time_series = map(
+        time_series,
+        function(.x) ts('$'(.x, !!target),
+                        start = c(year(min('$'(.x, !!index))), month(min('$'(.x, !!index)))),
+                        end = c(year(max('$'(.x, !!index))), month(max('$'(.x, !!index)))),
+                        frequency = 12) %>%
+          as_tsibble()
+      )) %>%
+    as_tibble() %>%
+    rename(!!target := value)
 }
