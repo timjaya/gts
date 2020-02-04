@@ -28,6 +28,7 @@ devtools::install_github("markfairbanks/gts")
   - `ts_prep()`: Convert a data frame to a `gts` ready dataset
   - `ts_split()`: Split your dataset to quickly enable parallel
     processing
+  - `ts_unnest_fable()`: Unnest a fable column
 
 ## Examples
 
