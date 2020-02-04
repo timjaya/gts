@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-ts_unnest_fable <- function(.data, col, keep = NULL) {
+ts_unnest_fable <- function(.data, col) {
   col <- enexpr(col)
   keep_cols <- enexpr(keep)
 
@@ -15,11 +15,8 @@ ts_unnest_fable <- function(.data, col, keep = NULL) {
 
   if (col_class != "fbl_ts") abort("unnest col must be a fable")
 
-  keep_cols <- vec_selector(.data, !!keep_cols)
-
   suppressWarnings(
     .data %>%
-      group_by(!!!keep_cols) %>%
       unnest_legacy(!!col) %>%
       ungroup() %>%
       mutate(.sd = map_dbl(.distribution, pluck, 2)) %>%
