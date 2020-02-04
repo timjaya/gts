@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  warning = FALSE
 )
 ```
 
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of gts is to provide a `fable`-like interface to the `forecast` package.
+The goal of `gts` is to speed up the functionality provided by `fable`.
 
 ## Installation
 
@@ -31,12 +32,10 @@ devtools::install_github("markfairbanks/gts")
 ```
 ## Functions
 
-`gts` has 4 core functions:
+`gts` has 2 core functions:
 
 * `ts_prep()`: Convert a data frame to a `gts` ready dataset
-* `ts_model()`: Apply a `forecast` function
-* `ts_forecast()`: Create forecasts for all trained models
-* `ts_accuracy()`: Extract in-sample accuracy for all trained models
+* `ts_split()`: Split your dataset to quickly enable parallel processing
 
 ## Examples
 
@@ -44,46 +43,37 @@ Starting with some example data:
 
 ```{r message=FALSE}
 library(gts)
-library(janitor)
-library(tsibbledata)
+library(fpp3)
+library(tidyverse)
 
 aus_df <- tsibbledata::aus_livestock %>%
-  janitor::clean_names() %>%
-  dt_arrange(animal, state) %>%
-  dt_mutate(group_id = .GRP, by = list(animal, state)) %>%
-  dt_filter(group_id <= 5) %>%
-  dt_mutate(month = as_date(month))
+  rename_all(janitor::make_clean_names) %>%
+  filter(state == "Australian Capital Territory") %>%
+  mutate(month = as_date(month))
 
 head(aus_df)
 ```
 
-We can now make a mable-like data.table. Note that you must use `.ts` when calling `ts_model()`.
+You can then use this to prep your data and create models
 
 ```{r}
-aus_mbl <- aus_df %>%
+aus_ts <- aus_df %>%
   ts_prep(key = c(animal, state), index = month, target = count) %>%
-  ts_model(ets(.ts),
-           ets(log(.ts + 1)))
-
-aus_mbl
+  mutate(mable = map(time_series, model,
+                     ets = ETS(count)))
+  
+aus_ts
 ```
 
-From the mable we can create a fable-like data.table:
+You can create forecasts from here, or get model accuracy.
 
 ```{r warning=FALSE}
-aus_fbl <- aus_mbl %>%
-  ts_forecast(h = 12)
+aus_ts <- aus_ts %>%
+  mutate(fable = map(mable, forecast, h = 1),
+         accuracy = map(mable, accuracy))
 
-aus_fbl
+aus_ts
 ```
-
-You can also get in-sample accuracy from the mable:
-
-```{r}
-aus_mbl %>%
-  ts_accuracy()
-```
-
 
 ## Running in parallel
 
@@ -92,23 +82,18 @@ pacman::p_load(furrr)
 
 model_fn <- function(.data) {
   .data %>%
-    ts_model(ets(.ts),
-             ets(log(.ts + 1)))
+    mutate(mable = map(time_series, model,
+                       ets = ETS(count)),
+           fable = map(mable, forecast, h = 1),
+           accuracy = map(mable, accuracy))
 }
 
 plan(multiprocess)
 
-parallel_mbl <- aus_df %>%
+parallel_ts <- aus_df %>%
   ts_prep(key = c(animal, state), index = month, target = count) %>%
-  dt_mutate(group_id = 1:.N %% 6) %>%
-  split(by = "group_id") %>% # Note: This version of split() uses data.table in the background
+  ts_split(6) %>%
   future_map_dfr(model_fn)
-
-parallel_fbl <- parallel_mbl %>%
-  as_dt() %>%
-  dt_mutate(group_id = 1:.N %% 6) %>%
-  split(by = "group_id") %>% # Note: This version of split() uses data.table in the background
-  future_map_dfr(ts_forecast)
 
 future:::ClusterRegistry("stop")
 ```
