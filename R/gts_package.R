@@ -1,5 +1,7 @@
 # Suppress R CMD check note
+#' @import data.table
 #' @importFrom data.table as.data.table
+#' @importFrom data.table is.data.table
 #' @importFrom dplyr as_tibble
 #' @importFrom dplyr group_split
 #' @importFrom dplyr mutate
