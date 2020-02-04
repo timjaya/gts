@@ -7,7 +7,9 @@
 ts_split(.data, times = 8)
 }
 \arguments{
-\item{times}{}
+\item{.data}{A nested tibble}
+
+\item{times}{Number of equal sized groups to make}
 }
 \description{
 Split data into a list of equal sized groups

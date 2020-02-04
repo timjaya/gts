@@ -3,8 +3,8 @@
 #' @description
 #' Split data into a list of equal sized groups
 #'
-#' @param .data
-#' @param times
+#' @param .data A nested tibble
+#' @param times Number of equal sized groups to make
 #'
 #' @export
 #'

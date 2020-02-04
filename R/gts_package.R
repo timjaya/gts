@@ -1,21 +1,9 @@
 # Suppress R CMD check note
 #' @import data.table
-#' @importFrom data.table as.data.table
-#' @importFrom data.table is.data.table
-#' @importFrom data.table month
-#' @importFrom data.table year
-#' @importFrom dplyr as_tibble
-#' @importFrom dplyr group_split
-#' @importFrom dplyr mutate
-#' @importFrom dplyr rename
-#' @importFrom purrr map
-#' @importFrom purrr map_lgl
-#' @importFrom rlang abort
-#' @importFrom rlang enexpr
-#' @importFrom rlang enexprs
-#' @importFrom rlang expr
-#' @importFrom rlang eval_tidy
-#' @importFrom rlang sym
+#' @importFrom data.table as.data.table is.data.table month year
+#' @importFrom dplyr as_tibble group_split mutate rename
+#' @importFrom purrr map map_lgl
+#' @importFrom rlang abort enexpr enexprs expr eval_tidy sym
 #' @importFrom stats ts
 #' @importFrom tsibble as_tsibble
 NULL
