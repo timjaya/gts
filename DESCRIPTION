@@ -18,6 +18,5 @@ Imports:
     data.table,
     rlang,
     purrr,
-    lubridate,
     tsibble,
     dplyr

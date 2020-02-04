@@ -13,7 +13,7 @@ ts_prep <- function(.data,
                     target = NULL) {
 
   if (!is.data.frame(.data)) stop(".data must be a data.frame or data.table")
-  if (!is.data.table(.data)) .data <- as.data.table(.data)
+  if (!data.table::is.data.table(.data)) .data <- data.table::as.data.table(.data)
 
   index <- enexpr(index)
   key <- enexpr(key)
@@ -25,13 +25,16 @@ ts_prep <- function(.data,
 
     .data <- .data %>%
       ts_group_nest() %>%
+      as_tibble() %>%
       rename(time_series = data)
+
 
   } else {
     groups <- vec_selector(.data, !!key)
 
     .data <- .data %>%
       ts_group_nest(!!!groups) %>%
+      as_tibble() %>%
       rename(time_series = data)
   }
 
@@ -43,8 +46,7 @@ ts_prep <- function(.data,
                         start = c(year(min('$'(.x, !!index))), month(min('$'(.x, !!index)))),
                         end = c(year(max('$'(.x, !!index))), month(max('$'(.x, !!index)))),
                         frequency = 12) %>%
-          as_tsibble()
-      )) %>%
-    as_tibble() %>%
-    rename(!!target := value)
+          as_tsibble() %>%
+          rename(!!target := value)
+      ))
 }

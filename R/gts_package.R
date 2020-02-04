@@ -2,12 +2,12 @@
 #' @import data.table
 #' @importFrom data.table as.data.table
 #' @importFrom data.table is.data.table
+#' @importFrom data.table month
+#' @importFrom data.table year
 #' @importFrom dplyr as_tibble
 #' @importFrom dplyr group_split
 #' @importFrom dplyr mutate
 #' @importFrom dplyr rename
-#' @importFrom lubridate month
-#' @importFrom lubridate year
 #' @importFrom purrr map
 #' @importFrom purrr map_lgl
 #' @importFrom rlang abort
