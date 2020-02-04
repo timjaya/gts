@@ -100,7 +100,7 @@ You can unnest the fable as follows:
 
 ``` r
 aus_ts %>%
-  ts_unnest_fable(fable, keep = c(animal, state))
+  ts_unnest_fable(fable)
 #> # A tibble: 6 x 9
 #>   animal  state  time_series  mable accuracy .model index           count    .sd
 #>   <fct>   <fct>  <list>       <lis> <list>   <chr>  <date>          <dbl>  <dbl>

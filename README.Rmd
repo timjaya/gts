@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gts v`r as.character(packageVersion("gts"))`
+# gts v`r as.character(packageVersion("gts"))` 
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -80,7 +80,7 @@ You can unnest the fable as follows:
 
 ```{r}
 aus_ts %>%
-  ts_unnest_fable(fable, keep = c(animal, state))
+  ts_unnest_fable(fable)
 ```
 
 
