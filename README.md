@@ -95,6 +95,22 @@ aus_ts
 #> 6 Sheep           Australian Cap… <tsibble [558… <tibble … <fable [… <tibble [1…
 ```
 
+You can unnest the fable as follows:
+
+``` r
+aus_ts %>%
+  ts_unnest_fable(fable, keep = c(animal, state))
+#> # A tibble: 6 x 9
+#>   animal  state  time_series  mable accuracy .model index           count    .sd
+#>   <fct>   <fct>  <list>       <lis> <list>   <chr>  <date>          <dbl>  <dbl>
+#> 1 Bulls,… Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01  3.08e-115  390. 
+#> 2 Calves  Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01  8.78e+  0   81.9
+#> 3 Cattle… Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01  9.84e+  1  408. 
+#> 4 Lambs   Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01  1.19e+  2 3488. 
+#> 5 Pigs    Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01 -3.35e+  2  605. 
+#> 6 Sheep   Austr… <tsibble [5… <tib… <tibble… ets    2019-01-01  1.91e-119 1691.
+```
+
 ## Running in parallel
 
 ``` r

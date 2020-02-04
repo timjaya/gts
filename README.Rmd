@@ -75,6 +75,14 @@ aus_ts <- aus_ts %>%
 aus_ts
 ```
 
+You can unnest the fable as follows:
+
+```{r}
+aus_ts %>%
+  ts_unnest_fable(fable, keep = c(animal, state))
+```
+
+
 ## Running in parallel
 
 ```{r warning=FALSE}
