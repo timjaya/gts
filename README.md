@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gts v0.0.1
+# gts v0.0.2
 
 <!-- badges: start -->
 
@@ -101,15 +101,15 @@ You can unnest the fable as follows:
 ``` r
 aus_ts %>%
   ts_unnest_fable(fable)
-#> # A tibble: 6 x 6
-#>   animal               state                 .model index           count    .sd
-#>   <fct>                <fct>                 <chr>  <date>          <dbl>  <dbl>
-#> 1 Bulls, bullocks and… Australian Capital T… ets    2019-01-01  3.08e-115  390. 
-#> 2 Calves               Australian Capital T… ets    2019-01-01  8.78e+  0   81.9
-#> 3 Cattle (excl. calve… Australian Capital T… ets    2019-01-01  9.84e+  1  408. 
-#> 4 Lambs                Australian Capital T… ets    2019-01-01  1.19e+  2 3488. 
-#> 5 Pigs                 Australian Capital T… ets    2019-01-01 -3.35e+  2  605. 
-#> 6 Sheep                Australian Capital T… ets    2019-01-01  1.91e-119 1691.
+#> # A tibble: 6 x 5
+#>   animal                   state                    .model index           count
+#>   <fct>                    <fct>                    <chr>  <date>          <dbl>
+#> 1 Bulls, bullocks and ste… Australian Capital Terr… ets    2019-01-01  3.08e-115
+#> 2 Calves                   Australian Capital Terr… ets    2019-01-01  8.78e+  0
+#> 3 Cattle (excl. calves)    Australian Capital Terr… ets    2019-01-01  9.84e+  1
+#> 4 Lambs                    Australian Capital Terr… ets    2019-01-01  1.19e+  2
+#> 5 Pigs                     Australian Capital Terr… ets    2019-01-01 -3.35e+  2
+#> 6 Sheep                    Australian Capital Terr… ets    2019-01-01  1.91e-119
 ```
 
 ## Running in parallel
