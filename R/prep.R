@@ -25,8 +25,7 @@ ts_prep <- function(.data,
 
     .data <- .data %>%
       ts_group_nest() %>%
-      as_tibble() %>%
-      rename(time_series = data)
+      as_tibble()
 
 
   } else {
@@ -34,8 +33,7 @@ ts_prep <- function(.data,
 
     .data <- .data %>%
       ts_group_nest(!!!groups) %>%
-      as_tibble() %>%
-      rename(time_series = data)
+      as_tibble()
   }
 
   .data %>%

@@ -1,4 +1,4 @@
-ts_group_nest <- function(.data, ..., .key = "data") {
+ts_group_nest <- function(.data, ..., .key = "time_series") {
 
   dots <- enexprs(...)
 
