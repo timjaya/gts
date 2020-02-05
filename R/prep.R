@@ -19,8 +19,6 @@ ts_prep <- function(.data,
   key <- enexpr(key)
   target <- enexpr(target)
 
-  index_col <- eval_tidy(expr('$'(.data, !!index)))
-
   if(is.null(target)) abort("target must be given")
 
   if (is.null(key)) {
