@@ -4,7 +4,7 @@
 \alias{ts_unnest_fable}
 \title{Unnest a fable column}
 \usage{
-ts_unnest_fable(.data, col, keep = NULL)
+ts_unnest_fable(.data, col)
 }
 \arguments{
 \item{.data}{A nested tibble with a fable column}
