@@ -24,16 +24,13 @@ ts_prep <- function(.data,
   if (is.null(key)) {
 
     .data <- .data %>%
-      ts_group_nest() %>%
-      as_tibble()
-
+      ts_group_nest()
 
   } else {
-    groups <- vec_selector(.data, !!key)
+    groups <- tidy_vec_selector(.data, !!key)
 
     .data <- .data %>%
-      ts_group_nest(!!!groups) %>%
-      as_tibble()
+      ts_group_nest(!!!groups)
   }
 
   .data %>%
