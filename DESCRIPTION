@@ -1,6 +1,6 @@
 Package: gts
 Title: Parallel 'fable' tools
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person(given = "Mark",
            family = "Fairbanks",
@@ -19,4 +19,5 @@ Imports:
     rlang,
     purrr,
     tsibble,
-    dplyr
+    dplyr,
+    tidyselect
