@@ -32,7 +32,7 @@ devtools::install_github("markfairbanks/gts")
 ```
 ## Functions
 
-`gts` has 2 core functions:
+`gts` has 3 core functions:
 
 * `ts_prep()`: Convert a data frame to a `gts` ready dataset
 * `ts_split()`: Split your dataset to quickly enable parallel processing
