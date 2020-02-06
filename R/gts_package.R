@@ -5,5 +5,6 @@
 #' @importFrom purrr map map_lgl
 #' @importFrom rlang abort enexpr enexprs expr eval_tidy sym
 #' @importFrom stats ts
+#' @importFrom tidyselect eval_select
 #' @importFrom tsibble as_tsibble
 NULL
